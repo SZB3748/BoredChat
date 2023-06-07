@@ -15,9 +15,8 @@ app.url_map.strict_slashes = False
 
 connections:dict[int, Connection] = {}
 
-def enqueue_msg(id:int, message:Message):
-    for cid, conn in connections.items():
-        if cid == id: continue
+def enqueue_msg(message:Message):
+    for conn in connections.values():
         conn.enqueue_msg(message)
 
 def create():
@@ -37,7 +36,7 @@ def index():
     if request.method == "POST":
         if "name" not in request.form:
             abort(400, "Missing name.")
-        if "id" not in session["id"]:
+        if "id" not in session:
             session["id"] = uuid4().int
         session["name"] = request.form["name"]
         return redirect(url_for("chat"))
@@ -51,10 +50,15 @@ def chat():
         return redirect(url_for("index"))
     return render_template("chat.html", name=session["name"])
 
+@app.route("/tips")
+def tips():
+    return render_template("tips.html")
+
 @sock.route("/ws")
 def web_socket(ws:Server):
     conn = Connection(session["id"])
     connections[conn.id] = conn
+    enqueue_msg(Message(0, "<span style=\"color: #820a0a;\">[SERVER]</span>", f"{session['name']} has joined."))
     try:
         while ws.connected:
             try:
@@ -62,11 +66,11 @@ def web_socket(ws:Server):
                 if msg:
                     enqueue_msg(Message(session["id"], session["name"], msg))
                 m = conn.dequeue_msg()
-                while m:
-                    if m.sender_id != session["id"]: continue        
-                    m = conn.dequeue_msg()
+                while m:    
                     ws.send(json.dumps({"name":m.sender_name, "content":m.content})+"\n")
+                    m = conn.dequeue_msg()
             except Exception as e:
                 traceback.print_exception(e)
     finally:
         connections.pop(conn.id, None)
+        enqueue_msg(Message(0, "<span style=\"color: #820a0a;\">[SERVER]</span>", f"{session['name']} has left."))

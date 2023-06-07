@@ -5,12 +5,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <title>BoredChat</title>
         <link href="{{ url_for('static', filename='css/chat.css') }}" rel="stylesheet" type="text/css"/>
+        <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
     </head>
     <body>
         <div id="messagesContainer" class="messages">
         </div>
         <div class="sender">
-            <span id="nameSpan">{{ name }}</span>:&emsp;<textarea id="msgInput" name="contents"></textarea><button id="sendMessage">Send</button>
+            <span id="nameSpan">{{ name|safe }}</span>:&emsp;<textarea id="msgInput" name="contents"></textarea><button id="sendMessage">Send</button> <a style="padding-left: 2em;" href="/tips" target="_blank">tips/help</a> <a style="padding-left: 2em;" href="https://github.com/SZB3748/BoredChat" target="_blank">github</a>
         </div>
     </body>
 </html>

@@ -23,20 +23,21 @@ window.addEventListener("load", () => {
     sendMessage = document.getElementById("sendMessage");
 
     //connect to websocket
-    const socket = new WebSocket("/ws");
+    const socket = new WebSocket(`ws://${location.host}/ws`);
     //handle messages
-    socket.onmessage = (ev) => {
+    socket.addEventListener("message", (ev) => {
         const data = ev.data;
         console.log(data);
         const msg = JSON.parse(data);
-        addMessage(msg)
-    };
+        addMessage(msg);
+    });
 
     //send messages
     sendMessage.addEventListener("click", (ev) => {
         if (ev.button!=0) return;
         socket.send(msgInput.value);
         msgInput.value = "";
+        msgInput.focus();
     })
 });
 
