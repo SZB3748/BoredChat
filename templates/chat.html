@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>BoredChat</title>
+        <link href="{{ url_for('static', filename='css/chat.css') }}" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+        <div id="messagesContainer" class="messages">
+        </div>
+        <div class="sender">
+            <span id="nameSpan">{{ name }}</span>:&emsp;<textarea id="msgInput" name="contents"></textarea><button id="sendMessage">Send</button>
+        </div>
+    </body>
+</html>

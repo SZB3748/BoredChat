@@ -37,7 +37,8 @@ def index():
     if request.method == "POST":
         if "name" not in request.form:
             abort(400, "Missing name.")
-        session["id"] = uuid4().int
+        if "id" not in session["id"]:
+            session["id"] = uuid4().int
         session["name"] = request.form["name"]
         return redirect(url_for("chat"))
     else:
@@ -48,7 +49,7 @@ def index():
 def chat():
     if "id" not in session:
         return redirect(url_for("index"))
-    return render_template("chat.html")
+    return render_template("chat.html", name=session["name"])
 
 @sock.route("/ws")
 def web_socket(ws:Server):

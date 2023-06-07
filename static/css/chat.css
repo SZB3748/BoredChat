@@ -1,0 +1,11 @@
+div.messages {
+    height: calc("100%", -30px);
+}
+
+div.sender {
+    height:30px;
+    margin: 0;
+    clear: both;
+    width:100%;
+    position: relative;
+}
