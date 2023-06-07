@@ -12,7 +12,7 @@ git clone https://github.com/SZB3748/BoredChat.git
 2. cd to repo root and install boredchat package
 ```
 cd /path/to/BoredChat
-pip install .
+pip3 install .
 ```
 
 ## Run
